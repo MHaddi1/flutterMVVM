@@ -11,12 +11,16 @@ class SplashServices {
       if (kDebugMode) {
         print(value.token);
       }
-      if (value.token!.isEmpty || value.token.toString() == "null") {
+      if (value.token == null || value.token.toString() == "null") {
         Timer(const Duration(seconds: 3),
             () => Get.toNamed(RoutesName.loginScrren));
       } else {
         Timer(const Duration(seconds: 3),
             () => Get.toNamed(RoutesName.homeScreen));
+      }
+    }).onError((error, stackTrace) {
+      if (kDebugMode) {
+        print(error.toString());
       }
     });
   }

@@ -4,7 +4,7 @@ import 'package:getx_mvvm/res/app_url/app_url.dart';
 class LoginRepository {
   final _networkApiService = NetworkApiService();
   Future<dynamic> loginApi(var data) async {
-    dynamic response = _networkApiService.postApi(data, AppUrl.loginApi);
+    dynamic response = await _networkApiService.postApi(data, AppUrl.loginApi);
     return response;
   }
 }

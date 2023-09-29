@@ -11,7 +11,17 @@ class Languages extends Translations {
           'general_exceptions':
               "We are unable to process your request\n Please try again",
           'welcome_back': "Welcome to My App",
-          "login": 'Login Page'
+          "login": 'Login Page',
+          "logout": 'Logout',
+          "logout_message": 'Are you sure you want to logout?',
+          "ok": "OK",
+          "cancel": "Cancel",
+          "register": 'Register Page',
+          "forget_password": '<PASSWORD>',
+          "reset_password": '<PASSWORD>',
+          "home": 'Home Page',
+          "profile": 'Profile Page',
+
         },
         'ur_PK': {
           'email_hint': 'ای میل درج کریں۔',
