@@ -4,7 +4,7 @@ import 'package:getx_mvvm/res/assets/images_assets.dart';
 import 'package:getx_mvvm/res/components/my_text_field.dart';
 import 'package:getx_mvvm/res/components/round_button.dart';
 import 'package:getx_mvvm/utils/utils.dart';
-import 'package:getx_mvvm/views_models/controller/login_view_controller.dart';
+import 'package:getx_mvvm/views_models/controller/login/login_view_controller.dart';
 import 'package:velocity_x/velocity_x.dart';
 
 class LoginPage extends StatefulWidget {
@@ -36,6 +36,7 @@ class _LoginPageState extends State<LoginPage> {
               .makeCentered(),
           30.heightBox,
           MyTextField(
+            textFieldType: TextInputType.emailAddress,
             onSubmit: () {},
             foucesNode: loginController.emailNode.value,
             textEditingController: loginController.emailController.value,
@@ -46,6 +47,7 @@ class _LoginPageState extends State<LoginPage> {
           ),
           20.heightBox,
           MyTextField(
+              textFieldType: TextInputType.visiblePassword,
               onSubmit: () {},
               obscureText: true,
               foucesNode: loginController.passwordNode.value,
@@ -56,14 +58,18 @@ class _LoginPageState extends State<LoginPage> {
               }),
           40.heightBox,
           VStack([
-            RoundButton(
-              title: "Login",
-              onPressed: () {
-                if (formKey.currentState!.validate()) {
-                  formKey.currentState!.save();
-                }
-              },
-              width: Get.width - 150,
+            Obx(
+              () => RoundButton(
+                title: "Login",
+                loading: loginController.loading.value,
+                onPressed: () {
+                  if (formKey.currentState!.validate()) {
+                    formKey.currentState!.save();
+                    loginController.loginApi();
+                  }
+                },
+                width: Get.width - 150,
+              ),
             )
           ])
         ]).px20().scrollVertical().centered(),
