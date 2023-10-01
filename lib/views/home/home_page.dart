@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:getx_mvvm/data/response/status.dart';
+import 'package:getx_mvvm/res/components/general_exception.dart';
+import 'package:getx_mvvm/res/components/internet_exceptions_widgets.dart';
 import 'package:getx_mvvm/res/routes/routes_name.dart';
 import 'package:getx_mvvm/views_models/controller/home/home_controller.dart';
 import 'package:getx_mvvm/views_models/controller/user_preference/user_preference_view_model.dart';
@@ -67,7 +69,17 @@ class _HomePageState extends State<HomePage> {
             }
           case Status.error:
             {
-              return "Something Went Wrong".text.make().centered();
+              print(homeController.error.value);
+              if (homeController.error.value ==
+                  "TimeoutException after 0:00:10.000000: Future not completed") {
+                return InternetExceptionsWidgets(onPress: () {
+                  homeController.refreshAPi();
+                });
+              } else {
+                return GeneralExceptionsWidgets(onPress: () {
+                  homeController.refreshAPi();
+                });
+              }
             }
           case Status.complete:
             {
@@ -100,40 +112,37 @@ class _HomePageState extends State<HomePage> {
                       );
                     })),
                 20.heightBox,
-                SingleChildScrollView(
-                  scrollDirection: Axis.vertical,
-                  child: SizedBox(
-                    height: Get.height * 0.55,
-                    child: ListView.builder(
-                        shrinkWrap: true,
-                        physics: const BouncingScrollPhysics(),
-                        scrollDirection: Axis.vertical,
-                        itemCount:
-                            homeController.userListModel.value.data!.length,
-                        itemBuilder: (context, index) {
-                          return Card(
-                            child: ListTile(
-                              leading: CircleAvatar(
-                                backgroundImage: NetworkImage(homeController
-                                    .userListModel.value.data![index].avatar
-                                    .toString()),
-                              ),
-                              title: homeController
-                                  .userListModel.value.data![index].firstName
-                                  .toString()
-                                  .text
-                                  .semiBold
-                                  .size(18)
-                                  .make(),
-                              subtitle: homeController
-                                  .userListModel.value.data![index].email
-                                  .toString()
-                                  .text
-                                  .make(),
+                SizedBox(
+                  height: Get.height * 0.55,
+                  child: ListView.builder(
+                      shrinkWrap: true,
+                      physics: const BouncingScrollPhysics(),
+                      scrollDirection: Axis.vertical,
+                      itemCount:
+                          homeController.userListModel.value.data!.length,
+                      itemBuilder: (context, index) {
+                        return Card(
+                          child: ListTile(
+                            leading: CircleAvatar(
+                              backgroundImage: NetworkImage(homeController
+                                  .userListModel.value.data![index].avatar
+                                  .toString()),
                             ),
-                          );
-                        }),
-                  ),
+                            title: homeController
+                                .userListModel.value.data![index].firstName
+                                .toString()
+                                .text
+                                .semiBold
+                                .size(18)
+                                .make(),
+                            subtitle: homeController
+                                .userListModel.value.data![index].email
+                                .toString()
+                                .text
+                                .make(),
+                          ),
+                        );
+                      }),
                 )
               ].vStack().scrollVertical().h(Get.height);
             }

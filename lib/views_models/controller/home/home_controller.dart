@@ -7,15 +7,35 @@ class HomeController extends GetxController {
   final _api = HomeRepository();
   final rxRequestState = Status.loading.obs;
   final userListModel = UserListModel().obs;
+  RxString error = "".obs;
 
   void setRexRequestState(Status value) => rxRequestState.value = value;
 
   void setUserModel(UserListModel userList) => userListModel.value = userList;
 
+  void setError(String value) => error.value = value;
+
   void userListApi() {
+    //setRexRequestState(Status.loading);
     _api.listApi().then((value) {
+      
       setRexRequestState(Status.complete);
       setUserModel(value);
-    }).onError((error, stackTrace) {});
+    }).onError((error, stackTrace) {
+      setRexRequestState(Status.error);
+      setError(error.toString());
+    });
+  }
+
+    void refreshAPi() {
+    setRexRequestState(Status.loading);
+    _api.listApi().then((value) {
+      
+      setRexRequestState(Status.complete);
+      setUserModel(value);
+    }).onError((error, stackTrace) {
+      setRexRequestState(Status.error);
+      setError(error.toString());
+    });
   }
 }
