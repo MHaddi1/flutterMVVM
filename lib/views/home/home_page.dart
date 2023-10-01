@@ -26,9 +26,9 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Vx.gray300,
+      backgroundColor: Vx.blue200,
       appBar: AppBar(
-        leading: const Icon(null),
+        automaticallyImplyLeading: false,
         centerTitle: true,
         title: 'home'.tr.text.make(),
         actions: [
@@ -71,32 +71,71 @@ class _HomePageState extends State<HomePage> {
             }
           case Status.complete:
             {
-              return ListView.builder(
-                  physics: const BouncingScrollPhysics(),
-                  shrinkWrap: true,
-                  itemCount: homeController.userListModel.value.data!.length,
-                  itemBuilder: ((context, index) {
-                    return Card(
-                      color: Vx.white,
-                      child: ListTile(
-                        title: homeController
-                            .userListModel.value.data![index].firstName
-                            .toString()
-                            .text
-                            .make(),
-                        subtitle: homeController
-                            .userListModel.value.data![index].email
-                            .toString()
-                            .text
-                            .make(),
-                        leading: CircleAvatar(
-                          backgroundImage: NetworkImage(homeController
-                              .userListModel.value.data![index].avatar
-                              .toString()),
-                        ),
-                      ),
-                    ).px8().py4();
-                  }));
+              return [
+                VxSwiper.builder(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: homeController.userListModel.value.data!.length,
+                    itemBuilder: ((context, index) {
+                      return Card(
+                        child: VStack([
+                          CircleAvatar(
+                            radius: 70,
+                            backgroundImage: NetworkImage(homeController
+                                .userListModel.value.data![index].avatar
+                                .toString()),
+                          ).centered().px12().py8(),
+                          homeController
+                              .userListModel.value.data![index].firstName
+                              .toString()
+                              .text
+                              .semiBold
+                              .size(18)
+                              .makeCentered(),
+                          homeController.userListModel.value.data![index].email
+                              .toString()
+                              .text
+                              .size(16)
+                              .makeCentered(),
+                        ]),
+                      );
+                    })),
+                20.heightBox,
+                SingleChildScrollView(
+                  scrollDirection: Axis.vertical,
+                  child: SizedBox(
+                    height: Get.height * 0.55,
+                    child: ListView.builder(
+                        shrinkWrap: true,
+                        physics: const BouncingScrollPhysics(),
+                        scrollDirection: Axis.vertical,
+                        itemCount:
+                            homeController.userListModel.value.data!.length,
+                        itemBuilder: (context, index) {
+                          return Card(
+                            child: ListTile(
+                              leading: CircleAvatar(
+                                backgroundImage: NetworkImage(homeController
+                                    .userListModel.value.data![index].avatar
+                                    .toString()),
+                              ),
+                              title: homeController
+                                  .userListModel.value.data![index].firstName
+                                  .toString()
+                                  .text
+                                  .semiBold
+                                  .size(18)
+                                  .make(),
+                              subtitle: homeController
+                                  .userListModel.value.data![index].email
+                                  .toString()
+                                  .text
+                                  .make(),
+                            ),
+                          );
+                        }),
+                  ),
+                )
+              ].vStack().scrollVertical().h(Get.height);
             }
         }
       }),
